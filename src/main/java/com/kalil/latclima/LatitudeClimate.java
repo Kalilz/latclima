@@ -32,7 +32,19 @@ public record LatitudeClimate(Kind kind, double radius) implements DensityFuncti
     @Override
     public double compute(FunctionContext ctx) {
         double lat = Math.min(Math.abs((double) ctx.blockZ()) / radius, 1.0) * 90.0;
-        return interp(lat, kind == Kind.TEMPERATURE ? TEMP : HUMID);
+        double baseValue = interp(lat, kind == Kind.TEMPERATURE ? TEMP : HUMID);
+
+        // Aplica o frio da altitude apenas se estiver calculando a temperatura
+        if (kind == Kind.TEMPERATURE) {
+            int y = ctx.blockY();
+            int altitudeThreshold = 100; // Altura onde o frio começa a aumentar
+            double dropPerBlock = 0.005; // Queda de temperatura por bloco acima do limite
+            
+            if (y > altitudeThreshold) {
+                baseValue -= (y - altitudeThreshold) * dropPerBlock;
+            }
+        }
+        return baseValue;
     }
 
     // smoothstep entre pontos de controle: platos zonais com transicoes suaves
