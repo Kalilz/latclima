@@ -1,0 +1,23 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+license = "MIT"
+
+[[mods]]
+modId = "latclima"
+version = "1.0.0"
+displayName = "Latitude Climate"
+description = '''Clima por latitude: quente no equador (Z = 0), gelado nos polos (Z = +-60000).'''
+
+[[dependencies.latclima]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.latclima]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.1]"
+ordering = "NONE"
+side = "BOTH"
