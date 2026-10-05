@@ -12,8 +12,6 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
-      - name: Gerar overworld.json (original + 2 campos de clima)
-        run: python3 tools/make_overworld.py
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: 8.14.3

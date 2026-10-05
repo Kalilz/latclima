@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.kalil.latclima.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "MixinNoiseRouterData"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
