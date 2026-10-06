@@ -31,19 +31,30 @@ public record LatitudeClimate(Kind kind, double radius) implements DensityFuncti
 
     @Override
     public double compute(FunctionContext ctx) {
-        double lat = Math.min(Math.abs((double) ctx.blockZ()) / radius, 1.0) * 90.0;
+        // Eixo Z: Define a latitude (Extremos congelados, centro quente)
+        double currentRadius = Config.POLAR_RADIUS.get();
+        double lat = Math.min(Math.abs((double) ctx.blockZ()) / currentRadius, 1.0) * 90.0;
         double baseValue = interp(lat, kind == Kind.TEMPERATURE ? TEMP : HUMID);
 
-        // Aplica o frio da altitude apenas se estiver calculando a temperatura
         if (kind == Kind.TEMPERATURE) {
+            // Eixo Y: Queda de temperatura em grandes cordilheiras (acima de 340)
             int y = ctx.blockY();
-            int altitudeThreshold = 100; // Altura onde o frio começa a aumentar
-            double dropPerBlock = 0.005; // Queda de temperatura por bloco acima do limite
+            int threshold = Config.ALTITUDE_THRESHOLD.get(); 
+            double drop = Config.ALTITUDE_DROP.get();
             
-            if (y > altitudeThreshold) {
-                baseValue -= (y - altitudeThreshold) * dropPerBlock;
+            if (y > threshold) {
+                baseValue -= (y - threshold) * drop;
             }
+        } else if (kind == Kind.HUMIDITY) {
+            // Eixo X: Onda de umidade para simular desertos e florestas na mesma faixa tropical
+            // A onda cria uma variação suave cruzando o mapa de leste a oeste
+            double longitudeWave = Math.sin(ctx.blockX() / 5000.0) * 0.35;
+            baseValue += longitudeWave;
+            
+            // Trava o valor para não quebrar os limites do Minecraft (-1.0 a 1.0)
+            baseValue = Math.max(-1.0, Math.min(1.0, baseValue));
         }
+
         return baseValue;
     }
 

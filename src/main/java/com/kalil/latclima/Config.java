@@ -16,8 +16,8 @@ public class Config {
         POLAR_RADIUS = BUILDER.comment("Distância (Z) máxima até os polos onde a temperatura chega ao mínimo")
                 .defineInRange("polarRadius", 60000.0, 1000.0, 10000000.0);
                 
-        ALTITUDE_THRESHOLD = BUILDER.comment("Altura (Y) onde o frio começa a aumentar")
-                .defineInRange("altitudeThreshold", 100, -64, 320);
+        ALTITUDE_THRESHOLD = BUILDER.comment("Altura (Y) onde o frio começa a aumentar. Configurado para 340 para picos altissimos.")
+                .defineInRange("altitudeThreshold", 340, -64, 1000);
                 
         ALTITUDE_DROP = BUILDER.comment("Queda de temperatura por bloco acima do limite")
                 .defineInRange("altitudeDrop", 0.005, 0.0, 0.1);
